@@ -1,0 +1,23 @@
+{
+  "name": "driver-revenge",
+  "version": "0.0.1",
+  "description": "Multiplayer driving game.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jacobvaneijk/driver-revenge.git"
+  },
+  "author": [
+    "Erik Verstegen <hello@erikverstegen.com>",
+    "Jacob van Eijk <jacob.vaneijk@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jacobvaneijk/driver-revenge/issues"
+  },
+  "homepage": "https://github.com/jacobvaneijk/driver-revenge#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.6.0"
+  }
+}
