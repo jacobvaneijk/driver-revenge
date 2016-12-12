@@ -1,3 +1,4 @@
+var connections = require('./connections');
 var $ = require('jquery');
 
 $(window).ready(function () {
