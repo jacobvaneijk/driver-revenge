@@ -4,12 +4,27 @@
         <meta charset="utf-8">
 
         <title>Driver Revenge</title>
+
+        <link rel="stylesheet" href="css/main.min.css">
     </head>
 
     <body>
-         <h1 id="url">url</h1>
+        <div class="home__wrapper">
+            <h1 class="home__url js-url">url</h1>
 
-         <script src="/socket.io/socket.io.js"></script>
-         <script src="js/desktop.min.js"></script>
+            <ul class="home__connections">
+                <li class="home__connection home__connection--active"></li>
+                <li class="home__connection home__connection--active"></li>
+                <li class="home__connection home__connection--active"></li>
+                <li class="home__connection home__connection--active"></li>
+                <li class="home__connection home__connection--active"></li>
+                <li class="home__connection"></li>
+            </ul>
+
+            <button class="home__next">Next</button>
+        </div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/desktop.min.js"></script>
     </body>
 </html>
