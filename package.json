@@ -18,8 +18,9 @@
   "homepage": "https://github.com/jacobvaneijk/driver-revenge#readme",
   "dependencies": {
     "express": "^4.14.0",
-    "socket.io": "^1.6.0",
-    "normalize.css": "^5.0.0"
+    "jquery": "^3.1.1",
+    "normalize.css": "^5.0.0",
+    "socket.io": "^1.6.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.3",
