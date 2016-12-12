@@ -59,12 +59,6 @@ var browserifyTask = function (done, dev) {
             'entries': './src/js/mobile/main.js',
             'dest': './public/js',
         },
-        {
-            'transformers': {},
-            'fileName': 'server.js',
-            'entries': './src/js/server/main.js',
-            'dest': './',
-        },
     ];
 
     bundles.map(function (bundle) {
@@ -116,7 +110,6 @@ gulp.task('clean', function () {
     del([
         './public/css',
         './public/js',
-        './server.js',
     ])
 });
 
