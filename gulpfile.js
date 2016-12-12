@@ -48,22 +48,22 @@ gulp.task('scss', function () {
 var browserifyTask = function (done, dev) {
     var bundles = [
         {
-            "transformers": {},
-            "fileName": "desktop.min.js",
-            "entries": "./src/js/desktop/main.js",
-            "dest": "./public/js",
+            'transformers': {},
+            'fileName': 'desktop.min.js',
+            'entries': './src/js/desktop/main.js',
+            'dest': './public/js',
         },
         {
-            "transformers": {},
-            "fileName": "mobile.min.js",
-            "entries": "./src/js/mobile/main.js",
-            "dest": "./public/js",
+            'transformers': {},
+            'fileName': 'mobile.min.js',
+            'entries': './src/js/mobile/main.js',
+            'dest': './public/js',
         },
         {
-            "transformers": {},
-            "fileName": "server.js",
-            "entries": "./src/js/server/main.js",
-            "dest": "./"
+            'transformers': {},
+            'fileName': 'server.js',
+            'entries': './src/js/server/main.js',
+            'dest': './',
         },
     ];
 
@@ -124,7 +124,7 @@ gulp.task('clean', function () {
  * Watch for file changes.
  */
 gulp.task('watch', function () {
-    gulp.watch('./src/js/{desktop,mobile}/**/*.js', ['watchify']);
+    gulp.watch('./src/js/{desktop,mobile,server}/**/*.js', ['watchify']);
     gulp.watch('./src/scss/**/*.scss', ['scss']);
 });
 
