@@ -15,5 +15,7 @@ $(window).ready(function () {
 
     socket.on('user added', function(socketID, data) {
         console.log('New player: ' + socketID);
+
+        connections.add(true);
     });
 });

@@ -29,23 +29,35 @@ var connection = io.on('connection', function(socket) {
     socket.on('new player', function(data) {
         var roomIndex = null;
 
-        // Check if the requested room exists.
+        // Try to find the room the user wants to join.
         for (var i = 0; i < rooms.length; i++) {
             if (rooms[i].key == data.key) {
                 roomIndex = i;
             }
         }
 
-        // Add a new user to the requested room (if it exists).
-        if (room !== null) {
+        // Quit if no room is found.
+        if (room === null) {
+            console.log('The requested room doesn\'t exist.');
+
+            return;
+        }
+
+        // Check if there is room to join.
+        if (rooms[roomIndex].players.length >= rooms[roomIndex].MAX_PLAYERS) {
+            console.log('No more room for players in this room.');
+
+            return;
+        }
+
+        // Add the user to the requested room.
+        {
             socket.roomIndex = roomIndex;
 
             rooms[roomIndex].players.push(socket);
             rooms[roomIndex].socket.emit('user added', socket.id, data);
 
             console.log('New player: ' + socket.id + '!');
-        } else {
-            console.log('The requested room doesn\'t exist.');
         }
     });
 
