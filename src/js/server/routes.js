@@ -6,7 +6,7 @@ module.exports = function(app) {
      * Homepage
      */
     app.get('/', function(req, res) {
-        res.sendFile(path.join(__dirname + '/../../../public/index.html'));
+        res.render('index.html');
     });
 
     /**
@@ -15,7 +15,7 @@ module.exports = function(app) {
     app.get('/:key([a-zA-Z0-9]{5})', function(req, res) {
         var key = req.params.key;
 
-        res.sendFile(path.join(__dirname + '/../../../public/mobile.html'));
+        res.render('mobile.html');
     });
 
-}
+};

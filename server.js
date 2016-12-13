@@ -1,13 +1,20 @@
-var express = require('express');
 var favicon = require('serve-favicon');
+var nunjucks = require('nunjucks');
+var express = require('express');
 var http = require('http');
+
+/**
+ * Configure application.
+ */
 
 var app = express();
 var server = http.Server(app);
 
-/**
- * Express app configuration.
- */
+nunjucks.configure('src/views', {
+    autoescape: true,
+    express: app
+});
+
 app.set('port', process.env.PORT || 3000);
 app.use(favicon(__dirname + '/public/favicon.png'));
 app.use(express.static(__dirname + '/public'));
