@@ -10,4 +10,4 @@ window.onload = function() {
     socket.on('room destroyed', function() {
         console.log('The room you joined was destroyed.');
     });
-}
+};

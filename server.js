@@ -6,7 +6,6 @@ var http = require('http');
 /**
  * Configure application.
  */
-
 var app = express();
 var server = http.Server(app);
 
