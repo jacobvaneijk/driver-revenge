@@ -1,4 +1,5 @@
 var express = require('express');
+var favicon = require('serve-favicon');
 var http = require('http');
 
 var app = express();
@@ -8,6 +9,7 @@ var server = http.Server(app);
  * Express app configuration.
  */
 app.set('port', process.env.PORT || 3000);
+app.use(favicon(__dirname + '/public/favicon.png'));
 app.use(express.static(__dirname + '/public'));
 
 /**
