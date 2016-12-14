@@ -3,21 +3,31 @@ var $ = require('jquery');
 $(window).ready(function() {
     var socket = io();
 
-    var roomKey = window.location.href.split('/')[3];
-
-    socket.emit('new player', {
-        key: roomKey
-    });
-
-    socket.on('room destroyed', function() {
-        console.log('The room you joined was destroyed.');
-    });
+    // Extract the game identifier from the URL.
+    var gameKey = window.location.href.split('/')[3];
 
     $('.js-save').on('click', function(event) {
         event.preventDefault();
 
-        socket.emit('change name player', $('.js-name').val());
+        // Inform the server we want to join a game.
+        socket.emit('player', {
+            key: gameKey,
+            name: $('.js-name').val()
+        });
+    });
 
-        // todo: move to next view
-    })
+    // Display a message of the game we want to join doesn't exist.
+    socket.on('game-does-not-exist', function() {
+        console.log('The game you intended to join doesn\'t exist.');
+    });
+
+    // Display a message of there is no more room in the game.
+    socket.on('no-more-room', function() {
+        console.log('The game you want to join doesn\'t has any places left.');
+    });
+
+    // Display a message if the game is destroyed.
+    socket.on('game-destroyed', function() {
+        console.log('The game you participated in doesn\'t exist anymore.');
+    });
 });

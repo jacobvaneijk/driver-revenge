@@ -1,21 +1,24 @@
-var path = require('path');
-
-module.exports = function(app) {
+module.exports = function(router) {
 
     /**
-     * Homepage
+     * Game
+     *
+     * This route sets up a new game.
      */
-    app.get('/', function(req, res) {
+    router.get('/', function(req, res) {
         res.render('desktop/index.html');
     });
 
     /**
-     * This is the route for mobile devices which want to connect to a room.
+     * Smartphone Controller
+     *
+     * Every player which wants to join a game will need to go through this
+     * route.
      */
-    app.get('/:key([a-zA-Z0-9]{5})', function(req, res) {
-        var key = req.params.key;
-
+    router.get('/:key([a-zA-Z0-9]{5})', function(req, res) {
         res.render('mobile/index.html');
     });
+
+    return router;
 
 };
