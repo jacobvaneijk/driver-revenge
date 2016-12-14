@@ -1,5 +1,11 @@
 {% extends 'mobile/layout.html' %}
 
 {% block body %}
-    <h1>Welcome!</h1>
+    <form>
+        <label>Please enter your name:</label>
+
+        <input class="js-name" type="text">
+
+        <button class="js-save">Save</button>
+    </form>
 {% endblock %}
