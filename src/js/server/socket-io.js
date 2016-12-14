@@ -13,8 +13,6 @@ module.exports = function(server) {
         });
 
         socket.on('new player', function(data) {
-            console.log(data);
-
             var roomIndex = null;
 
             // Try to find the room the user wants to join.
@@ -48,6 +46,21 @@ module.exports = function(server) {
 
                 console.log('New player: ' + socket.id + '!');
             }
+        });
+
+        socket.on('change name player', function(name) {
+            var playerIndex = null;
+
+            // Find the player which disconnected.
+            for (var i = 0; i < rooms[socket.roomIndex].players.length; i++) {
+                if (rooms[socket.roomIndex].players[i].id == socket.id) {
+                    playerIndex = i;
+                }
+            }
+
+            rooms[socket.roomIndex].players[playerIndex].name = name;
+
+            console.log(rooms[socket.roomIndex].players[playerIndex]);
         });
 
         socket.on('disconnect', function(data) {
