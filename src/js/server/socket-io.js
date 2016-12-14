@@ -59,8 +59,6 @@ module.exports = function(server) {
             }
 
             rooms[socket.roomIndex].players[playerIndex].name = name;
-
-            console.log(rooms[socket.roomIndex].players[playerIndex]);
         });
 
         socket.on('disconnect', function(data) {
