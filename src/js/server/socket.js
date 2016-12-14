@@ -62,7 +62,7 @@ module.exports = function(server) {
             // Inform the game a new player is added.
             games[gameIndex].socket.emit('player-joined', games[gameIndex].players.length);
 
-            console.log('(' + data.name + '): Joined ' + games[gameIndex].key + '!');
+            console.log('(Player ' + data.name + '): Joined ' + games[gameIndex].key + '!');
         });
 
         /**
@@ -101,7 +101,7 @@ module.exports = function(server) {
                     }
                 }
 
-                console.log('(' + games[socket.gameIndex].players[playerIndex].name + '): Disconnected.');
+                console.log('(Player ' + games[socket.gameIndex].players[playerIndex].name + '): Disconnected.');
 
                 // Inform the game the player left.
                 games[socket.gameIndex].socket.emit('player-left', games[socket.gameIndex].players.length);
