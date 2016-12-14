@@ -1,0 +1,39 @@
+.form__label {
+
+}
+
+.form__input {
+    height: 36px;
+    padding: 0 10px;
+    background: {
+        image: none;
+        color: #fff;
+    }
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    transition: border-color ease-in-out .2s;
+
+    &:active,
+    &:focus {
+        outline: none;
+        border: {
+            color: $brand-primary;
+        }
+    }
+
+}
+
+.form__button {
+    height: 36px;
+    padding: 0 24px;
+    color: #fff;
+    background: {
+        color: $brand-primary;
+    }
+    border: {
+        radius: 2px;
+        width: 0;
+    }
+    cursor: pointer;
+    user-select: none;
+}

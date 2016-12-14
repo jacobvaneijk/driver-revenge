@@ -1,0 +1,83 @@
+/**
+ * TABLE of CONTENTS
+ *
+ * Colors..............................Brand colors for use across the website.
+ * Body................................Settings for the `<body>` element.
+ * Typography..........................Font, line-height, and color for body
+ *                                     text, headings and more.
+ * Grid................................Settings for the grid.
+ * Tables..............................Settings for the `<table>` element.
+ * Forms...............................Settings for the `<form>` element.
+ * Header..............................Settings for the header.
+ */
+
+/*------------------------------------*\
+  #COLORS
+\*------------------------------------*/
+
+/**
+ * The names of the colors are generated using http://chir.ag/projects/name-that-color/.
+ */
+
+$color-cornflower-blue: #4286f4;
+$color-black: #000;
+$color-white: #fff;
+
+$brand-primary: $color-cornflower-blue;
+
+/*------------------------------------*\
+  #BODY
+\*------------------------------------*/
+
+$body-background-color: $color-white;
+$body-text-color: $color-black;
+
+/*------------------------------------*\
+  #TYPOGRAPHY
+\*------------------------------------*/
+
+$font-family-sans-serif: "Roboto", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
+$font-family-serif: "Georgia", "Times New Roman", "Times", serif;
+$font-family-mono: "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+$font-family-base: $font-family-sans-serif;
+
+$font-weight-thin: 100;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+$font-weight-black: 900;
+
+$font-weight-base: $font-weight-regular;
+
+/**
+ * Pixel value used to responsively scale all typography. Applied to the
+ * `<html>` element.
+ */
+$font-size-root: 16px;
+$font-size-base: 1rem;
+
+$line-height-base: 1.5;
+
+$text-color-muted: lighten($body-text-color, 70%);
+
+$abbr-border-color: lighten($body-text-color, 70%);
+
+$link-text-decoration: none;
+$link-text-color: $brand-primary;
+
+$link-hover-text-decoration: underline;
+$link-hover-text-color: darken($link-text-color, 40%);
+
+/*------------------------------------*\
+  #TABLES
+\*------------------------------------*/
+
+$table-background-color: transparent;
+$table-cell-padding: .75rem;
+
+/*------------------------------------*\
+  #FORMS
+\*------------------------------------*/
+
+$cursor-disabled: not-allowed;

@@ -1,9 +1,10 @@
 {% extends 'mobile/layout.html' %}
 
 {% block body %}
-    <label>Please enter your name:</label>
+    <main class="change-name">
+        <label class="form__label change-name__label" for="name">Please enter your name:</label>
+        <input class="form__input change-name__input js-name" id="name" type="text">
 
-    <input class="js-name" type="text">
-
-    <button class="js-save">Save</button>
+        <button class="form__button change-name__button js-save">Save</button>
+    </main>
 {% endblock %}

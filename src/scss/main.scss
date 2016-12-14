@@ -1,3 +1,14 @@
-@import "normalize.css";
+// Helper
+@import "helper/mixins";
+@import "helper/variables";
 
-@import "pages/home";
+// Base
+@import "normalize.css";
+@import "base/reset";
+
+// Components
+@import "component/form";
+
+// Pages
+@import "page/home";
+@import "page/change-name";
