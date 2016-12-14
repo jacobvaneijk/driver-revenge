@@ -9,6 +9,10 @@ $(window).ready(function () {
 
     $('.js-url').text(roomURL);
 
+    for (var i = 0; i < 6; ++i) {
+        connections.add();
+    }
+
     socket.emit('new room', {
         key: roomKey,
     });
@@ -16,6 +20,10 @@ $(window).ready(function () {
     socket.on('user added', function(socketID, data) {
         console.log('New player: ' + socketID);
 
-        connections.add(true);
+        connections.add(data.index);
+    });
+
+    socket.on('user removed', function(index) {
+        connections.remove(index);
     });
 });

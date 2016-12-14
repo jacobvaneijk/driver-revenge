@@ -6,7 +6,7 @@ module.exports = function(app) {
      * Homepage
      */
     app.get('/', function(req, res) {
-        res.render('index.html');
+        res.render('desktop/index.html');
     });
 
     /**
@@ -15,7 +15,7 @@ module.exports = function(app) {
     app.get('/:key([a-zA-Z0-9]{5})', function(req, res) {
         var key = req.params.key;
 
-        res.render('mobile.html');
+        res.render('mobile/index.html');
     });
 
 };

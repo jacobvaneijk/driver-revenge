@@ -13,6 +13,8 @@ module.exports = function(server) {
         });
 
         socket.on('new player', function(data) {
+            console.log(data);
+
             var roomIndex = null;
 
             // Try to find the room the user wants to join.
@@ -39,6 +41,7 @@ module.exports = function(server) {
             // Add the user to the requested room.
             {
                 socket.roomIndex = roomIndex;
+                data.index = rooms[roomIndex].players.length + 1;
 
                 rooms[roomIndex].players.push(socket);
                 rooms[roomIndex].socket.emit('user added', socket.id, data);
@@ -78,6 +81,7 @@ module.exports = function(server) {
 
                 // Remove the player.
                 rooms[socket.roomIndex].players.splice(playerIndex, 1);
+                rooms[socket.roomIndex].socket.emit('user removed', rooms[socket.roomIndex].players.length + 1);
             }
         });
 
