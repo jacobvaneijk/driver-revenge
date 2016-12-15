@@ -1,6 +1,7 @@
 module.exports = function(server) {
 
     var io = require('socket.io')(server);
+    var util = require('./util');
 
     var Game = require('./game');
     var Player = require('./player');
@@ -70,14 +71,7 @@ module.exports = function(server) {
          */
         socket.on('disconnect', function() {
             if (socket.type === 'game') {
-                var gameIndex = null;
-
-                // Find the game which disconnected.
-                for (var i = 0; i < games.length; ++i) {
-                    if (games[i].socket.id === socket.id) {
-                        gameIndex = i;
-                    }
-                }
+                var gameIndex = util.findGame(games, socket.id);
 
                 console.log('(Game ' + games[gameIndex].key + '): Disconnected.');
 
