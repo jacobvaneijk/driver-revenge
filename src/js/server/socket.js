@@ -47,7 +47,7 @@ module.exports = function(server) {
             }
 
             // Check if there is room for the player in the game.
-            if (games[gameIndex].players.length >= 2) {
+            if (games[gameIndex].players.length >= Game.MAX_PLAYERS) {
                 socket.emit('no-more-room');
 
                 return;
