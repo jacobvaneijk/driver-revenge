@@ -1,7 +1,19 @@
 {% extends 'mobile/layout.html' %}
 
 {% block body %}
-    <main class="change-name">
+    <div class="change-name__success js-waiting">
+        <svg class="change-name__loader" width="97px" height="97px" viewBox="0 0 99 99" xmlns="http://www.w3.org/2000/svg">
+            <circle class="loader__path" fill="none" stroke-width="6" stroke-linecap="round" cx="49" cy="49" r="45"></circle>
+        </svg>
+
+        <span class="change-name__information">
+            Waiting for the game to start
+
+            <span class="change-name__periods js-periods"></span>
+        </span>
+    </div>
+
+    <main class="change-name js-form">
         <label class="form__label change-name__label" for="name">Please enter your name:</label>
         <input class="form__input change-name__input js-name" id="name" type="text">
 

@@ -1,6 +1,7 @@
 var $ = require('jquery');
 
 $(window).ready(function() {
+    var periods = 0;
     var socket = io();
 
     // Extract the game identifier from the URL.
@@ -14,6 +15,18 @@ $(window).ready(function() {
             key: gameKey,
             name: $('.js-name').val()
         });
+
+        // Show the waiting screen.
+        $('.js-form').hide();
+        $('.js-waiting').css('display', 'flex');
+
+        setInterval(function() {
+            if (++periods === 4) {
+                periods = 0;
+            }
+
+            $('.js-periods').text('.'.repeat(periods));
+        }, 500);
     });
 
     // Display a message of the game we want to join doesn't exist.
