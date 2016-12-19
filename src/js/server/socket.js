@@ -10,31 +10,12 @@ module.exports = function(server) {
 
     io.on('connection', function(socket) {
 
-        /**
-         * A new client connected, which wants to host a game.
-         */
-        socket.on('game', function(key) {
-            var game = new Game(key, socket);
-
-            // Make sure we can later identify the socket (i.e. on disconnection).
-            game.socket.type = 'game';
-
-            // Add the newly created game to the list of games.
-            games.push(game);
-
-            console.log('(Game ' + key + '): Game created!');
-        });
-
-        /**
-         * A new client connected, which wants to attend to a game as a player.
-         */
-        socket.on('player', function(data) {
-            var player = new Player(data.name, socket);
-
+        socket.on('check-game-conditions', function(key) {
             // Find the game the user wants to join.
             var gameIndex = null;
+
             for (var i = 0; i < games.length; ++i) {
-                if (games[i].key == data.key) {
+                if (games[i].key === key) {
                     gameIndex = i;
                 }
             }
@@ -52,6 +33,37 @@ module.exports = function(server) {
 
                 return;
             }
+        });
+
+        /**
+         * A new client connected, which wants to host a game.
+         */
+        socket.on('game', function(key) {
+            var game = new Game(key, socket);
+
+            // Make sure we can later identify the socket (i.e. on disconnection).
+            game.socket.type = 'game';
+
+            // Add the newly created game to the list of games.
+            games.push(game);
+
+            console.log('[Game ' + key + '] Game created.');
+        });
+
+        /**
+         * A new client connected, which wants to attend to a game as a player.
+         */
+        socket.on('player', function(data) {
+            var player = new Player(data.name, socket);
+
+            // Find the game the user wants to join.
+            var gameIndex = null;
+
+            for (var i = 0; i < games.length; ++i) {
+                if (games[i].key === data.key) {
+                    gameIndex = i;
+                }
+            }
 
             // Make sure we can later identify the socket (i.e. on disconnection).
             player.socket.type = 'player';
@@ -63,7 +75,7 @@ module.exports = function(server) {
             // Inform the game a new player is added.
             games[gameIndex].socket.emit('player-joined', games[gameIndex].players.length, data.name);
 
-            console.log('(Player ' + data.name + '): Joined ' + games[gameIndex].key + '!');
+            console.log('[Player ' + data.name + '] Joined game "' + games[gameIndex].key + '".');
         });
 
         /**
@@ -80,7 +92,7 @@ module.exports = function(server) {
             if (socket.type === 'game') {
                 var gameIndex = util.findGame(games, socket.id);
 
-                console.log('(Game ' + games[gameIndex].key + '): Disconnected.');
+                console.log('[Game ' + games[gameIndex].key + '] Disconnected.');
 
                 // Inform every player in the game that it doesn't exist anymore.
                 games[gameIndex].broadcast('game-destroyed');
@@ -102,7 +114,7 @@ module.exports = function(server) {
                     }
                 }
 
-                console.log('(Player ' + games[socket.gameIndex].players[playerIndex].name + '): Disconnected.');
+                console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] Disconnected from game "' + games[socket.gameIndex].key + '".');
 
                 // Inform the game the player left.
                 games[socket.gameIndex].socket.emit('player-left', playerIndex);
@@ -110,7 +122,7 @@ module.exports = function(server) {
                 // Get rid of the player.
                 games[socket.gameIndex].players.splice(playerIndex, 1);
             } else {
-                console.log('wtf?');
+                console.log('[!] An unknown event happened.');
             }
         });
 

@@ -1,12 +1,11 @@
 var Game = function(key, socket) {
-    this.key = key;
-    this.socket = socket;
-
     this.players = [];
+    this.socket = socket;
+    this.key = key;
 };
 
-Object.defineProperty(Game, "MAX_PLAYERS", {
-    value: 6
+Object.defineProperty(Game, 'MAX_PLAYERS', {
+    value: 6,
 });
 
 Game.prototype.addPlayer = function(player) {
