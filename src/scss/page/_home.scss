@@ -30,6 +30,7 @@
     }
 
         .home__connection {
+            position: relative;
             width: 16px;
             height: 16px;
             background: {
@@ -44,4 +45,39 @@
             background: {
                 color: $brand-primary;
             }
+
+            &:hover::after {
+                position: absolute;
+                top: 24px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 100;
+                white-space: nowrap;
+                padding: 2px 4px;
+                background: {
+                    color: rgba(#000, .75);
+                }
+                border: {
+                    radius: 3px;
+                }
+                content: attr(data-name);
+                color: #fff;
+            }
+
+            &:hover::before {
+                position: absolute;
+                top: 19px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 100;
+                width: 0;
+                height: 0;
+                border: {
+                    color: transparent transparent rgba(#000, .75) transparent;
+                    width: 0 5px 5px 5px;
+                    style: solid;
+                }
+                content: "";
+            }
+
         }
