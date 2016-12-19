@@ -1,3 +1,4 @@
+var sourcemaps = require('gulp-sourcemaps');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var postcss = require('gulp-postcss');
@@ -15,29 +16,31 @@ var del = require('del');
  */
 gulp.task('scss', function () {
     return gulp.src('./src/scss/main.scss')
-        .pipe(sass())
-            .on('error', notify.onError({
-                message: '<%= error.message %>',
-                title: 'Error in SCSS',
-            }))
-        .pipe(postcss([
-            require('postcss-partial-import'),
-            require('autoprefixer')({
-                'browsers': [
-                    'ie >= 10',
-                    'ie_mob >= 10',
-                    'ff >= 30',
-                    'chrome >= 34',
-                    'safari >= 7',
-                    'opera >= 23',
-                    'ios >= 7',
-                    'android >= 4.4',
-                    'bb >= 10',
-                ],
-            }),
-            require('csswring'),
-        ]))
+        .pipe(sourcemaps.init())
+            .pipe(sass())
+                .on('error', notify.onError({
+                    message: '<%= error.message %>',
+                    title: 'Error in SCSS',
+                }))
+            .pipe(postcss([
+                require('postcss-partial-import'),
+                require('autoprefixer')({
+                    'browsers': [
+                        'ie >= 10',
+                        'ie_mob >= 10',
+                        'ff >= 30',
+                        'chrome >= 34',
+                        'safari >= 7',
+                        'opera >= 23',
+                        'ios >= 7',
+                        'android >= 4.4',
+                        'bb >= 10',
+                    ],
+                }),
+                require('csswring'),
+            ]))
         .pipe(rename('main.min.css'))
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest('./public/css'))
     ;
 });
@@ -85,7 +88,9 @@ var browserifyTask = function (done, dev) {
                     }))
                 .pipe(source(bundle.fileName))
                 .pipe(buffer())
-                    .pipe(uglify())
+                    .pipe(sourcemaps.init({ loadMaps: true }))
+                        .pipe(uglify())
+                    .pipe(sourcemaps.write('.'))
                 .pipe(gulp.dest(bundle.dest))
             ;
         };
