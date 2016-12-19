@@ -15,8 +15,8 @@ $(window).ready(function () {
     // Inform the server we want to host a game.
     socket.emit('game', gameKey);
 
-    // Display 6 empty dots.
-    Connections.init(6);
+    // Display 5 empty dots.
+    Connections.init(5);
 
     // A player joined; update the connection dots.
     socket.on('player-joined', function(index, name) {

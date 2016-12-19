@@ -5,7 +5,7 @@ var Game = function(key, socket) {
 };
 
 Object.defineProperty(Game, 'MAX_PLAYERS', {
-    value: 6,
+    value: 5,
 });
 
 Game.prototype.addPlayer = function(player) {
