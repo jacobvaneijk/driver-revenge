@@ -1,4 +1,4 @@
-var connections = require('./connections');
+var Connections = require('./connections');
 var $ = require('jquery');
 
 $(window).ready(function () {
@@ -15,17 +15,21 @@ $(window).ready(function () {
     socket.emit('game', gameKey);
 
     // Display 6 empty dots.
-    for (var i = 0; i < 6; ++i) {
-        connections.add();
-    }
+    // for (var i = 0; i < 6; ++i) {
+    //     connections.add();
+    // }
+
+    Connections.init(6);
 
     // A player joined; update the connection dots.
-    socket.on('player-joined', function(index) {
-        connections.add(index);
+    socket.on('player-joined', function(index, name) {
+        // connections.add(name);
+        Connections.addConnection(index, name);
     });
 
     // A player left; update the connection dots.
     socket.on('player-left', function(index) {
-        connections.remove(index);
+        Connections.removeConnection(index);
+        // connections.remove(name);
     });
 });

@@ -1,14 +1,38 @@
 var $ = require('jquery');
 
 module.exports = {
-    remove: function(index) {
-        $('.js-connection:nth-child(' + index + ')').removeClass('home__connection--active');
+    connections: [],
+    maxPlayers: 0,
+
+    init: function(maxPlayers) {
+        this.maxPlayers = maxPlayers;
+
+        this.drawConnections();
     },
-    add: function(index) {
-        if (index) {
-            $('.js-connection:nth-child(' + index + ')').addClass('home__connection--active');
-        } else {
-            $('.js-connections').append('<li class="home__connection js-connection"></li>');
+
+    addConnection: function(index, name) {
+        this.connections[index - 1] = name;
+
+        this.drawConnections();
+    },
+
+    removeConnection: function(index) {
+        this.connections.splice(index, 1);
+
+        this.drawConnections();
+    },
+
+    drawConnections: function() {
+        $('.js-connections').empty();
+
+        var emptyConnections = this.maxPlayers - this.connections.length;
+
+        for (var i = 0; i < this.connections.length; ++i) {
+            $('.js-connections').append('<li class="home__connection home__connection--active" data-name="' + this.connections[i] + '"></li>');
         }
-    },
+
+        for (var i = 0; i < emptyConnections; ++i) {
+            $('.js-connections').append('<li class="home__connection"></li>');
+        }
+    }
 };
