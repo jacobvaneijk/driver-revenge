@@ -1,8 +1,6 @@
 module.exports = function(router) {
 
     /**
-     * Game
-     *
      * This route sets up a new game.
      */
     router.get('/', function(req, res) {
@@ -10,8 +8,6 @@ module.exports = function(router) {
     });
 
     /**
-     * Smartphone Controller
-     *
      * Every player which wants to join a game will need to go through this
      * route.
      */

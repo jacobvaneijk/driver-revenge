@@ -29,12 +29,12 @@ $(window).ready(function() {
         }, 500);
     });
 
-    // Display a message of the game we want to join doesn't exist.
+    // Display a message if the game we want to join doesn't exist.
     socket.on('game-does-not-exist', function() {
         console.log('The game you intended to join doesn\'t exist.');
     });
 
-    // Display a message of there is no more room in the game.
+    // Display a message if there is no more room in the game.
     socket.on('no-more-room', function() {
         console.log('The game you want to join doesn\'t has any places left.');
     });

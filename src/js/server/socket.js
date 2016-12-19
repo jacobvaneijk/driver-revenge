@@ -67,6 +67,13 @@ module.exports = function(server) {
         });
 
         /**
+         * A host informs it wants to start the game.
+         */
+        socket.on('start-game', function() {
+            var gameIndex = util.findGame(games, socket.id);
+        });
+
+        /**
          * A client has just disconnected and we need to handle that.
          */
         socket.on('disconnect', function() {

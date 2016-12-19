@@ -15,21 +15,22 @@ $(window).ready(function () {
     socket.emit('game', gameKey);
 
     // Display 6 empty dots.
-    // for (var i = 0; i < 6; ++i) {
-    //     connections.add();
-    // }
-
     Connections.init(6);
 
     // A player joined; update the connection dots.
     socket.on('player-joined', function(index, name) {
-        // connections.add(name);
         Connections.addConnection(index, name);
     });
 
     // A player left; update the connection dots.
     socket.on('player-left', function(index) {
         Connections.removeConnection(index);
-        // connections.remove(name);
+    });
+
+    $('.js-next').on('click', function(event) {
+        event.preventDefault();
+
+        // Inform the server we want to start the game.
+        socket.emit('start-game');
     });
 });
