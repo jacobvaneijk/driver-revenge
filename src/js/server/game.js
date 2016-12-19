@@ -18,4 +18,8 @@ Game.prototype.broadcast = function(message, data) {
     }
 };
 
+Game.prototype.start = function() {
+    // Do game logic here.
+};
+
 module.exports = Game;

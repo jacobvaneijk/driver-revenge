@@ -1,4 +1,5 @@
 var Connections = require('./connections');
+var Game = require('./game');
 var $ = require('jquery');
 
 $(window).ready(function () {
@@ -32,5 +33,11 @@ $(window).ready(function () {
 
         // Inform the server we want to start the game.
         socket.emit('start-game');
+
+        // Hide the home wrapper.
+        $('.home__wrapper').hide();
+
+        // Initialize the game.
+        Game.init();
     });
 });
