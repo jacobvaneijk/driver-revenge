@@ -1,3 +1,4 @@
+var Controller = require('./controller.js');
 var SetName = require('./setname.js');
 var Error = require('./error.js');
 var $ = require('jquery');
@@ -31,5 +32,10 @@ $(window).ready(function() {
     // Display a message if the game is destroyed.
     socket.on('game-destroyed', function() {
         Error.displayError('The game you participated in does not exist anymore.');
+    });
+
+    // Display the controller if the game is started.
+    socket.on('game-started', function() {
+        Controller.display();
     });
 });

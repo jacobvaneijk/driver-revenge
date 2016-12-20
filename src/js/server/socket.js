@@ -84,7 +84,10 @@ module.exports = function(server) {
         socket.on('start-game', function() {
             var gameIndex = util.findGame(games, socket.id);
 
+            games[gameIndex].broadcast('game-started');
             games[gameIndex].start();
+
+            console.log('[Game ' + games[gameIndex].key + '] Has started the game.')
         });
 
         /**
