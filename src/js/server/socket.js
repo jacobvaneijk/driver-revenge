@@ -91,6 +91,69 @@ module.exports = function(server) {
         });
 
         /**
+         * A player started accelerating.
+         */
+        socket.on('accelerate', function() {
+            var playerIndex = null;
+
+            // Check if the game still exists.
+            if (typeof games[socket.gameIndex] === 'undefined') {
+                return;
+            }
+
+            // Find the player which disconnected.
+            for (var i = 0; i < games[socket.gameIndex].players.length; ++i) {
+                if (games[socket.gameIndex].players[i].socket.id == socket.id) {
+                    playerIndex = i;
+                }
+            }
+
+            console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] Started accelerating.');
+        });
+
+        /**
+         * A player stopped accelerating.
+         */
+        socket.on('stop-accelerate', function() {
+            var playerIndex = null;
+
+            // Check if the game still exists.
+            if (typeof games[socket.gameIndex] === 'undefined') {
+                return;
+            }
+
+            // Find the player which disconnected.
+            for (var i = 0; i < games[socket.gameIndex].players.length; ++i) {
+                if (games[socket.gameIndex].players[i].socket.id == socket.id) {
+                    playerIndex = i;
+                }
+            }
+
+            console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] Stopped accelerating.');
+        });
+
+        /**
+         * A player fires a bullet.
+         */
+        socket.on('shoot', function() {
+            var playerIndex = null;
+
+            // Check if the game still exists.
+            if (typeof games[socket.gameIndex] === 'undefined') {
+                return;
+            }
+
+            // Find the player which disconnected.
+            for (var i = 0; i < games[socket.gameIndex].players.length; ++i) {
+                if (games[socket.gameIndex].players[i].socket.id == socket.id) {
+                    playerIndex = i;
+                }
+            }
+
+            console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] Fires a bullet.');
+        });
+
+        /**
          * A client has just disconnected and we need to handle that.
          */
         socket.on('disconnect', function() {

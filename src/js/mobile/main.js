@@ -1,7 +1,6 @@
 var Controller = require('./controller.js');
 var SetName = require('./setname.js');
 var Error = require('./error.js');
-var $ = require('jquery');
 
 $(window).ready(function() {
     var socket = io();
@@ -36,6 +35,7 @@ $(window).ready(function() {
 
     // Display the controller if the game is started.
     socket.on('game-started', function() {
+        Controller.init(socket);
         Controller.display();
     });
 });

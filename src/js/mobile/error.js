@@ -1,5 +1,3 @@
-var $ = require('jquery');
-
 module.exports = {
     displayError: function(message) {
         $('.js-form, .js-waiting, .js-controller').hide();

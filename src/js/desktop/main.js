@@ -1,6 +1,5 @@
 var Connections = require('./connections');
 var Game = require('./game');
-var $ = require('jquery');
 
 $(window).ready(function () {
     var socket = io();

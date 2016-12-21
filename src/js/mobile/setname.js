@@ -1,5 +1,3 @@
-var $ = require('jquery');
-
 module.exports = {
     saveName: function(socket, gameKey) {
         event.preventDefault();
