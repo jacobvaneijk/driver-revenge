@@ -172,6 +172,27 @@ module.exports = function(server) {
         });
 
         /**
+         * A player sent gyro data.
+         */
+        socket.on('gyro', function(data) {
+            var playerIndex = null;
+
+            // Check if the game still exists.
+            if (typeof games[socket.gameIndex] === 'undefined') {
+                return;
+            }
+
+            // Find the player which disconnected.
+            for (var i = 0; i < games[socket.gameIndex].players.length; ++i) {
+                if (games[socket.gameIndex].players[i].socket.id == socket.id) {
+                    playerIndex = i;
+                }
+            }
+
+            console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] ' + data + '.');
+        });
+
+        /**
          * A client has just disconnected and we need to handle that.
          */
         socket.on('disconnect', function() {
