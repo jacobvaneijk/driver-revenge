@@ -1,15 +1,6 @@
 {
-    "background_color": "c9ddff",
     "tile_height": 128,
     "tile_width": 128,
-    "layers": [
-        {
-            "data": [],
-            "name": "background",
-            "width": 5,
-            "height": 5,
-            "x": 0,
-            "y": 0
-        }
-    ]
+    "background": "img/land/sand/land_sand05.png",
+    "layers": []
 }

@@ -2,44 +2,35 @@ var Connections = require('./connections');
 
 module.exports = {
     renderer: null,
-    stage: null,
     socket: null,
+    stage: null,
 
     init: function(socket) {
-        console.log('Initializing the game...');
-
-        var self = this;
-
-        this.renderer = new PIXI.autoDetectRenderer(640, 480);
-        this.stage = new PIXI.Container();
         this.socket = socket;
 
-        $('body').append(this.renderer.view);
+        this.renderer = new PIXI.autoDetectRenderer(800, 600, {backgroundColor: 0xAA0000});
+        this.stage = new PIXI.Container();
 
-        this.renderer.autoresize = true;
+        $('body').append(this.renderer.view);
     },
 
     loadLevel: function(level) {
-        console.log('Parsing the level data...');
-
-        this.renderer.backgroundColor = parseInt(level.background_color, 16);
-        this.renderer.autoResize = true;
+        var self = this;
 
         var width = Math.floor($('body').innerWidth() / level.tile_width) * level.tile_width;
         var height = Math.floor($('body').innerHeight() / level.tile_height) * level.tile_height;
 
+        this.renderer.autoResize = true;
         this.renderer.resize(width, height);
 
-        this.spawnCars();
-    },
+        PIXI.loader.add('background', level.background).load(function (loader, resources) {
+            var background = new PIXI.extras.TilingSprite(resources.background.texture, self.renderer.width, self.renderer.height);
 
-    spawnCars: function() {
-        console.log('Spawning cars on the level...');
-    },
+            self.stage.addChild(background);
+        });
 
-    render: function() {
-        console.log('Rendering the game...');
-
-        this.renderer.render(this.stage);
+        PIXI.loader.on('complete', function() {
+            self.renderer.render(self.stage);
+        });
     }
 };

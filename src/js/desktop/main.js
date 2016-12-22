@@ -42,7 +42,6 @@ $(window).ready(function () {
         // Load the level in the game and render it afterwards.
         socket.on('level', function(level) {
             Game.loadLevel(level);
-            Game.render();
         });
     });
 });
