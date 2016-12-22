@@ -28,5 +28,9 @@ module.exports = {
         $('.js-shoot').on('tap', function(event) {
             self.socket.emit('shoot');
         });
+
+        window.ondevicemotion = function(event) {
+            self.socket.emit('gyro', event.accelerationIncludingGravity.y);
+        };
     }
 };
