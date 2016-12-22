@@ -1,7 +1,10 @@
-module.exports = function(server) {
+var path = require('path');
+var fs = require('fs');
 
+var util = require('./util');
+
+module.exports = function(server) {
     var io = require('socket.io')(server);
-    var util = require('./util');
 
     var Game = require('./game');
     var Player = require('./player');
@@ -83,9 +86,24 @@ module.exports = function(server) {
          */
         socket.on('start-game', function() {
             var gameIndex = util.findGame(games, socket.id);
+            var levelName = 'desert';
+            var levelPath = path.resolve(__dirname + "/../../../levels/" + levelName + '.json');
 
-            games[gameIndex].broadcast('game-started');
-            games[gameIndex].start();
+            // Read the level file.
+            fs.readFile(levelPath, function(error, data) {
+                if (error) {
+                    return console.error(error);
+                }
+
+                // Give the game the level to load.
+                games[gameIndex].socket.emit('level', JSON.parse(data));
+
+                // Inform every player that the game has begon..
+                games[gameIndex].broadcast('game-started');
+
+                // Start the game on the server side.
+                games[gameIndex].start();
+            });
 
             console.log('[Game ' + games[gameIndex].key + '] Has started the game.')
         });
@@ -195,5 +213,4 @@ module.exports = function(server) {
         });
 
     });
-
 };
