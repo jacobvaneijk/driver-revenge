@@ -38,5 +38,11 @@ $(window).ready(function () {
 
         // Initialize the game.
         Game.init();
+
+        // Load the level in the game and render it afterwards.
+        socket.on('level', function(level) {
+            Game.loadLevel(level);
+            Game.render();
+        });
     });
 });
