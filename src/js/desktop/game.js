@@ -8,7 +8,7 @@ module.exports = {
     init: function(socket) {
         this.socket = socket;
 
-        this.renderer = new PIXI.autoDetectRenderer(800, 600, {backgroundColor: 0xAA0000});
+        this.renderer = new PIXI.autoDetectRenderer(800, 600);
         this.stage = new PIXI.Container();
 
         $('body').append(this.renderer.view);
