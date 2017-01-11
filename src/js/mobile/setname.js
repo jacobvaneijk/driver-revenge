@@ -1,7 +1,5 @@
 module.exports = {
     saveName: function(socket, gameKey) {
-        event.preventDefault();
-
         // Inform the server we want to join a game.
         socket.emit('player', {
             name: $('.js-name').val(),
