@@ -86,7 +86,7 @@ module.exports = function(server) {
          */
         socket.on('start-game', function() {
             var gameIndex = util.findGame(games, socket.id);
-            var levelName = 'desert';
+            var levelName = 'track';
             var levelPath = path.resolve(__dirname + "/../../../levels/" + levelName + '.json');
 
             // Read the level file.

@@ -1,6 +1,7 @@
 var Connections = require('./connections');
 
 module.exports = {
+    spawnpoints: [],
     renderer: null,
     socket: null,
     stage: null,
@@ -31,21 +32,26 @@ module.exports = {
             PIXI.loader.add('land_' + i, 'img/land/' + this.level.land + '/land_' + this.level.land + (i <= 9 ? '0' : '') + i + '.png');
         }
 
+        // Load all asphalt textures (90 in total).
+        for (var i = 1; i <= 90; ++i) {
+            PIXI.loader.add('asphalt_' + i, 'img/land/asphalt/road_asphalt' + (i <= 9 ? '0' : '') + i + '.png');
+        }
+
         var tile_objects = [
-            "barrel_blue",
-            "barrel_blue_down",
-            "barrel_red",
-            "barrel_red_down",
-            "barrier_red",
-            "barrier_white",
-            "cone_down",
-            "cone_straight",
-            "oil",
-            "rock1",
-            "rock2",
-            "rock3",
-            "tree_large",
-            "tree_small"
+            'barrel_blue',
+            'barrel_blue_down',
+            'barrel_red',
+            'barrel_red_down',
+            'barrier_red',
+            'barrier_white',
+            'cone_down',
+            'cone_straight',
+            'oil',
+            'rock1',
+            'rock2',
+            'rock3',
+            'tree_large',
+            'tree_small'
         ];
 
         // Load all objects textures.
@@ -70,12 +76,46 @@ module.exports = {
                         objectTile.position.x = self.level.tile_height * y;
                         objectTile.position.y = self.level.tile_width * x;
 
+                        if (typeof object.scale !== 'undefined') {
+                            objectTile.scale.x = object.scale.x;
+                            objectTile.scale.y = object.scale.y;
+                        }
+
+                        if (typeof object.rotation !== 'undefined') {
+                            objectTile.rotation = object.rotation;
+                        }
+
+                        if (typeof object.anchor !== 'undefined') {
+                            objectTile.anchor.x = object.anchor.x;
+                            objectTile.anchor.y = object.anchor.y;
+                        }
+
+                        if (typeof object.type !== 'undefined') {
+                            switch (object.type) {
+                                case 'spawnpoint':
+                                    var offsetX = 0;
+                                    var offsetY = 0;
+
+                                    if (typeof object.spawnpointOffset !== 'undefined') {
+                                        offsetX = self.level.tile_height * object.spawnpointOffset.x;
+                                        offsetY = self.level.tile_height * object.spawnpointOffset.y;
+                                    }
+
+                                    self.spawnpoints.push({
+                                        x: self.level.tile_height * object.position.x + offsetX,
+                                        y: self.level.tile_width * object.position.y + offsetY
+                                    });
+
+                                    break;
+                            }
+                        }
+
                         objectContainer.addChild(objectTile);
                     }
                 }
 
-                objectContainer.position.x = self.level.tile_height * object.x;
-                objectContainer.position.y = self.level.tile_width * object.y;
+                objectContainer.position.x = self.level.tile_height * object.position.x;
+                objectContainer.position.y = self.level.tile_width * object.position.y;
 
                 self.stage.addChild(objectContainer);
             }
@@ -102,15 +142,14 @@ module.exports = {
             for (var i = 0; i < Connections.connections.length; ++i) {
                 var car = new PIXI.Sprite(resources['car_' + colors[i]].texture);
 
-                car.position.x = i * 70;
+                car.position.x = self.spawnpoints[i].x;
+                car.position.y = self.spawnpoints[i].y;
 
-                car.scale.x = .5;
-                car.scale.y = .5;
+                car.scale.x = .4;
+                car.scale.y = .4;
 
                 car.anchor.x = 0.5;
                 car.anchor.y = 0.5;
-
-                car.rotation = 90;
 
                 self.stage.addChild(car);
             }
