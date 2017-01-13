@@ -19,30 +19,29 @@ module.exports = {
     loadLevel: function(level) {
         var self = this;
 
-        var width = level.width / 2 * 64;
-        var height = level.height / 2 * 64;
+        var width = level.width * 64;
+        var height = level.height * 64;
 
         this.renderer.autoResize = true;
         this.renderer.resize(width, height);
 
         // Load all the land textures.
         var landTypes = {
-            'asphalt': 91, // R-component [1-91]
+            'grass': 14, // R-component [1-14]
             'dirt': 14, // G-component [1-14]
-            'grass': 14, // B-component [1-14]
-            'sand': 14 // A-component [1-14]
+            'sand': 14 // B-component [1-14]
         };
 
         for (var type in landTypes) {
             for (var i = 1; i <= landTypes[type]; ++i) {
-                PIXI.loader.add(type + '_' + i, 'img/land/' + type + '/' + (type === 'asphalt' ? 'road' : 'land') + '_' + type + (i <= 9 ? '0' : '') + i + '.png');
+                PIXI.loader.add(type + '_' + i, 'img/land/' + type + '/land_' + type + (i <= 9 ? '0' : '') + i + '.png');
             }
         }
 
         PIXI.loader.load(function(loader, resources) {
-            for (var x = 0; x < level.width / 2; ++x) {
-                for (var y = 0; y < level.height / 2; ++y) {
-                    var tile = new PIXI.Sprite(resources[self.getTileForColor(level.data[level.width / 2 * x + y])].texture);
+            for (var x = 0; x < level.width; ++x) {
+                for (var y = 0; y < level.height; ++y) {
+                    var tile = new PIXI.Sprite(resources[self.getTileForColor(level.data[x * level.height + y])].texture);
 
                     tile.position.x = 64 * x;
                     tile.position.y = 64 * y;
@@ -62,28 +61,16 @@ module.exports = {
 
     getTileForColor: function(color) {
         if (color[0] !== 0) {
-            return 'asphalt_' + color[0];
+            return 'grass_' + (color[0] / 10);
         }
 
         if (color[1] !== 0) {
-            return 'dirt_' + color[1];
+            return 'dirt_' + (color[1] / 10);
         }
 
         if (color[2] !== 0) {
-            return 'grass_' + color[2];
+            return 'sand_' + (color[2] / 10);
         }
-
-        if (color[3] !== 0) {
-            return 'sand_' + color[3];
-        }
-
-        /*if (color[0] === 0 && color[1] === 255 && color[2] === 0) {
-            return 'grass_4';
-        }
-
-        if (color[0] === 0 && color[1] === 0 && color[2] === 255) {
-            return 'asphalt_72';
-        }*/
     },
 
     renderCars: function() {
