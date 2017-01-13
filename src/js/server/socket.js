@@ -1,3 +1,4 @@
+var PNGReader = require('png.js');
 var path = require('path');
 var fs = require('fs');
 
@@ -86,8 +87,8 @@ module.exports = function(server) {
          */
         socket.on('start-game', function() {
             var gameIndex = util.findGame(games, socket.id);
-            var levelName = 'track';
-            var levelPath = path.resolve(__dirname + "/../../../levels/" + levelName + '.json');
+            var levelName = 'racetrack';
+            var levelPath = path.resolve(__dirname + '/../../../levels/' + levelName + '.png');
 
             // Read the level file.
             fs.readFile(levelPath, function(error, data) {
@@ -96,7 +97,23 @@ module.exports = function(server) {
                 }
 
                 // Give the game the level to load.
-                games[gameIndex].socket.emit('level', JSON.parse(data));
+                var reader = new PNGReader(data);
+
+                reader.parse(function(error, data) {
+                    var levelData = [];
+
+                    for (var x = 0; x < data.getWidth(); ++x) {
+                        for (var y = 0; y < data.getHeight(); ++y) {
+                            levelData.push(data.getPixel(x, y));
+                        }
+                    }
+
+                    games[gameIndex].socket.emit('level', {
+                        data: levelData,
+                        width: data.getWidth(),
+                        height: data.getHeight()
+                    });
+                });
 
                 // Inform every player that the game has begon..
                 games[gameIndex].broadcast('game-started');
