@@ -44,4 +44,9 @@ $(window).ready(function () {
             Game.loadLevel(level);
         });
     });
+
+    // A player throttles.
+    socket.on('throttle', function(index) {
+        console.log('(' + index + ') is throttling.');
+    });
 });

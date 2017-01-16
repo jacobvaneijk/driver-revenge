@@ -1,4 +1,3 @@
-var Victor = require('victor');
 var Connections = require('./connections');
 var Car = require('./car');
 
@@ -89,11 +88,11 @@ module.exports = {
         this.createCars();
 
         PIXI.loader.on('complete', function() {
-            self.frame();
+            self.update();
         });
     },
 
-    frame: function() {
+    update: function() {
         var self = this;
 
         var currentTime = Date.now();
@@ -106,24 +105,16 @@ module.exports = {
             }
 
             for (var i = 0; i < this.cars.length; ++i) {
-                this.cars[i].doPhysics(deltaTime / 1000);
+                this.cars[i].update(deltaTime);
             }
 
             this.previousTime = currentTime;
         }
 
-        /*for (var i = 0; i < self.cars.length; ++i) {
-            var currentTime = Date.now();
-            var deltaTime = currentTime - (self.cars[i].previousTime || Date.now());
-
-            self.cars[i].doPhysics(deltaTime / 1000);
-            self.cars[i].previousTime = currentTime;
-        }*/
-
-        this.renderer.render(self.stage);
+        this.renderer.render(this.stage);
 
         requestAnimationFrame(function() {
-            self.frame();
+            self.update();
         });
     },
 
@@ -140,43 +131,14 @@ module.exports = {
         PIXI.loader.load(function(loader, resources) {
             //for (var i = 0; i < Connections.connections.length; ++i) {
                 var sprite = new PIXI.Sprite(resources['car_' + colors[0]].texture);
-                var position = new Victor(100, 100);
+                var car = new Car(sprite, 100, 100);
 
-                var car = new Car(sprite, position);
+                sprite.anchor.x = 0.5;
+                sprite.anchor.y = 0.5;
 
                 self.stage.addChild(sprite);
                 self.cars.push(car);
             //}
-        });}
-
-    /*
-    renderCars: function() {
-        var colors = [ 'black', 'blue', 'green', 'red', 'yellow' ];
-        var self = this;
-
-        // Load the car textures.
-        for (var i = 0; i < colors.length; ++i) {
-            PIXI.loader.add('car_' + colors[i], 'img/cars/car_' + colors[i] + '.png');
-        }
-
-        // Add the players to the stage.
-        PIXI.loader.load(function(loader, resources) {
-            for (var i = 0; i < Connections.connections.length; ++i) {
-                var car = new PIXI.Sprite(resources['car_' + colors[i]].texture);
-
-                car.position.x = i * 70;
-
-                car.scale.x = .5;
-                car.scale.y = .5;
-
-                car.anchor.x = 0.5;
-                car.anchor.y = 0.5;
-
-                car.rotation = 90;
-
-                self.stage.addChild(car);
-            }
         });
     }
-    */
 };

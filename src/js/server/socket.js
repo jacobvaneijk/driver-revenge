@@ -127,6 +127,8 @@ module.exports = function(server) {
             }
 
             console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] Started accelerating.');
+
+            games[socket.gameIndex].socket.emit('throttle', playerIndex);
         });
 
         /**
@@ -189,7 +191,7 @@ module.exports = function(server) {
                 }
             }
 
-            console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] ' + data + '.');
+            //console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] ' + data + '.');
         });
 
         /**
