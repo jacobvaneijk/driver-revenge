@@ -1,14 +1,19 @@
+var Victor = require('victor');
 var Connections = require('./connections');
+var Car = require('./car');
 
 module.exports = {
+    previousTime: null,
     renderer: null,
     socket: null,
     stage: null,
     level: null,
+    cars: [],
 
     init: function(socket) {
         this.socket = socket;
 
+        this.previousTime = Date.now();
         this.renderer = new PIXI.autoDetectRenderer(800, 600);
         this.stage = new PIXI.Container();
 
@@ -81,13 +86,70 @@ module.exports = {
             }
         });
 
-        this.renderCars();
+        this.createCars();
 
         PIXI.loader.on('complete', function() {
-            self.renderer.render(self.stage);
+            self.frame();
         });
     },
 
+    frame: function() {
+        var self = this;
+
+        var currentTime = Date.now();
+        var deltaTime = currentTime - this.previousTime;
+
+        if (deltaTime > 0) {
+            if (deltaTime > 100) {
+                this.previousTime += deltaTime - 100;
+                deltaTime = 100;
+            }
+
+            for (var i = 0; i < this.cars.length; ++i) {
+                this.cars[i].doPhysics(deltaTime / 1000);
+            }
+
+            this.previousTime = currentTime;
+        }
+
+        /*for (var i = 0; i < self.cars.length; ++i) {
+            var currentTime = Date.now();
+            var deltaTime = currentTime - (self.cars[i].previousTime || Date.now());
+
+            self.cars[i].doPhysics(deltaTime / 1000);
+            self.cars[i].previousTime = currentTime;
+        }*/
+
+        this.renderer.render(self.stage);
+
+        requestAnimationFrame(function() {
+            self.frame();
+        });
+    },
+
+    createCars: function() {
+        var self = this;
+        var colors = ['black', 'blue', 'green', 'red', 'yellow'];
+
+        // Load car textures.
+        for (var i = 0; i < colors.length; ++i) {
+            PIXI.loader.add('car_' + colors[i], 'img/cars/car_' + colors[i] + '.png');
+        }
+
+        // Create a new car for every connection.
+        PIXI.loader.load(function(loader, resources) {
+            //for (var i = 0; i < Connections.connections.length; ++i) {
+                var sprite = new PIXI.Sprite(resources['car_' + colors[0]].texture);
+                var position = new Victor(100, 100);
+
+                var car = new Car(sprite, position);
+
+                self.stage.addChild(sprite);
+                self.cars.push(car);
+            //}
+        });}
+
+    /*
     renderCars: function() {
         var colors = [ 'black', 'blue', 'green', 'red', 'yellow' ];
         var self = this;
@@ -116,4 +178,5 @@ module.exports = {
             }
         });
     }
+    */
 };
