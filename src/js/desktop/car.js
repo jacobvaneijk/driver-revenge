@@ -24,7 +24,7 @@ var Car = function(sprite, x, y) {
     this.axleWeightRatioRear = 0.0;
 
     this.gravity = 9.81;
-    this.mass = 1200;
+    this.mass = 800;
     this.inertiaScale = 1.0;
     this.halfWidth = 0.8;
     this.cgToFront = 2.0;
@@ -35,7 +35,7 @@ var Car = function(sprite, x, y) {
     this.wheelRadius = 0.3;
     this.tireGrip = 2.0;
     this.lockGrip = 0.7;
-    this.engineForce = 8000.0;
+    this.engineForce = 16000.0;
     this.brakeForce = 12000.0;
     this.eBrakeForce = this.brakeForce / 2.5;
     this.weightTransfer = 0.2;
@@ -53,12 +53,15 @@ var Car = function(sprite, x, y) {
     this.inputs = {
         left: 0,
         right: 0,
-        throttle: 0.6,
+        throttle: 0.0,
         brake: 0,
         ebrake: 0
     };
 };
 
+/**
+ * You are not expected to understand this.
+ */
 Car.prototype.doPhysics = function(dt) {
     var sn = Math.sin(this.heading);
     var cs = Math.cos(this.heading);
@@ -117,8 +120,8 @@ Car.prototype.doPhysics = function(dt) {
     this.yawRate += angularAccel * dt;
     this.heading += this.yawRate * dt;
 
-    this.position.x += this.velocity.x * dt;
-    this.position.y += this.velocity.y * dt;
+    this.position.x += (this.velocity.x * 8) * dt;
+    this.position.y += (this.velocity.y * 8) * dt;
 
     this.sprite.position.x = this.position.x;
     this.sprite.position.y = this.position.y;
@@ -128,9 +131,9 @@ Car.prototype.doPhysics = function(dt) {
 Car.prototype.update = function(dtms) {
     var dt = dtms / 1000.0;
 
-    this.throttle = 0.2;
+    this.throttle = 0.0;
     this.brake = 0.0;
-    this.steer = 0.1;
+    this.steer = this.inputs.right - this.inputs.left;
     this.steerAngle = this.steer * this.maxSteer;
 
     this.doPhysics(dt);

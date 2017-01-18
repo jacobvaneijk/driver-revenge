@@ -45,8 +45,15 @@ $(window).ready(function () {
         });
     });
 
-    // A player throttles.
-    socket.on('throttle', function(index) {
-        console.log('(' + index + ') is throttling.');
+    socket.on('throttle down', function(index) {
+        Game.throttle(index);
+    });
+
+    socket.on('throttle up', function(index) {
+        Game.brake(index);
+    });
+
+    socket.on('steer', function(data) {
+        Game.steer(data.player, data.value);
     });
 });

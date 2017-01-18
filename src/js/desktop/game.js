@@ -1,4 +1,5 @@
 var Connections = require('./connections');
+var GMath = require('./gmath');;
 var Car = require('./car');
 
 module.exports = {
@@ -129,16 +130,41 @@ module.exports = {
 
         // Create a new car for every connection.
         PIXI.loader.load(function(loader, resources) {
-            //for (var i = 0; i < Connections.connections.length; ++i) {
-                var sprite = new PIXI.Sprite(resources['car_' + colors[0]].texture);
-                var car = new Car(sprite, 100, 100);
+            for (var i = 0; i < Connections.connections.length; ++i) {
+                var sprite = new PIXI.Sprite(resources['car_' + colors[i]].texture);
+                var car = new Car(sprite, 400 * (i + 1), 100);
 
                 sprite.anchor.x = 0.5;
                 sprite.anchor.y = 0.5;
 
                 self.stage.addChild(sprite);
                 self.cars.push(car);
-            //}
+            }
         });
+    },
+
+    throttle: function(index) {
+        this.cars[index].inputs.brake = 0.0;
+        this.cars[index].inputs.throttle = 1.0;
+    },
+
+    brake: function(index) {
+        this.cars[index].inputs.throttle = 0.0;
+        this.cars[index].inputs.brake = 0.5;
+    },
+
+    steer: function(index, steering) {
+        if (this.cars[index].inputs.right == 0.0 && this.cars[index].inputs.left == 0.0) {
+            if (steering > 2.5) {
+                this.cars[index].inputs.right = 1.0;
+            } else if (steering < -2.5) {
+                this.cars[index].inputs.left = 1.0;
+            }
+        } else {
+            if (steering > -2.5 && steering < 2.5) {
+                this.cars[index].inputs.left = 0.0;
+                this.cars[index].inputs.right = 0.0;
+            }
+        }
     }
 };
