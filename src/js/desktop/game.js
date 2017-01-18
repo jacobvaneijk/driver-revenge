@@ -1,15 +1,19 @@
 var Connections = require('./connections');
+var GMath = require('./gmath');;
+var Car = require('./car');
 
 module.exports = {
-    spawnpoints: [],
+    previousTime: null,
     renderer: null,
     socket: null,
     stage: null,
     level: [],
+    cars: [],
 
     init: function(socket) {
         this.socket = socket;
 
+        this.previousTime = Date.now();
         this.renderer = new PIXI.autoDetectRenderer(800, 600);
         this.stage = new PIXI.Container();
 
@@ -86,8 +90,10 @@ module.exports = {
             }
         });
 
+        this.createCars();
+
         PIXI.loader.on('complete', function() {
-            self.renderer.render(self.stage);
+            self.update();
         });
     },
 
@@ -115,31 +121,78 @@ module.exports = {
         return null;
     },
 
-    renderCars: function() {
-        var colors = [ 'black', 'blue', 'green', 'red', 'yellow' ];
+    update: function() {
         var self = this;
 
-        // Load the car textures.
+        var currentTime = Date.now();
+        var deltaTime = currentTime - this.previousTime;
+
+        if (deltaTime > 0) {
+            if (deltaTime > 100) {
+                this.previousTime += deltaTime - 100;
+                deltaTime = 100;
+            }
+
+            for (var i = 0; i < this.cars.length; ++i) {
+                this.cars[i].update(deltaTime);
+            }
+
+            this.previousTime = currentTime;
+        }
+
+        this.renderer.render(this.stage);
+
+        requestAnimationFrame(function() {
+            self.update();
+        });
+    },
+
+    createCars: function() {
+        var self = this;
+        var colors = ['black', 'blue', 'green', 'red', 'yellow'];
+
+        // Load car textures.
         for (var i = 0; i < colors.length; ++i) {
             PIXI.loader.add('car_' + colors[i], 'img/cars/car_' + colors[i] + '.png');
         }
 
-        // Add the players to the stage.
+        // Create a new car for every connection.
         PIXI.loader.load(function(loader, resources) {
             for (var i = 0; i < Connections.connections.length; ++i) {
-                var car = new PIXI.Sprite(resources['car_' + colors[i]].texture);
+                var sprite = new PIXI.Sprite(resources['car_' + colors[i]].texture);
+                var car = new Car(sprite, 400 * (i + 1), 100);
 
-                car.position.x = self.spawnpoints[i].x;
-                car.position.y = self.spawnpoints[i].y;
+                sprite.anchor.x = 0.5;
+                sprite.anchor.y = 0.5;
 
-                car.scale.x = .4;
-                car.scale.y = .4;
-
-                car.anchor.x = 0.5;
-                car.anchor.y = 0.5;
-
-                self.stage.addChild(car);
+                self.stage.addChild(sprite);
+                self.cars.push(car);
             }
         });
+    },
+
+    throttle: function(index) {
+        this.cars[index].inputs.brake = 0.0;
+        this.cars[index].inputs.throttle = 1.0;
+    },
+
+    brake: function(index) {
+        this.cars[index].inputs.throttle = 0.0;
+        this.cars[index].inputs.brake = 0.5;
+    },
+
+    steer: function(index, steering) {
+        if (this.cars[index].inputs.right == 0.0 && this.cars[index].inputs.left == 0.0) {
+            if (steering > 2.5) {
+                this.cars[index].inputs.right = 1.0;
+            } else if (steering < -2.5) {
+                this.cars[index].inputs.left = 1.0;
+            }
+        } else {
+            if (steering > -2.5 && steering < 2.5) {
+                this.cars[index].inputs.left = 0.0;
+                this.cars[index].inputs.right = 0.0;
+            }
+        }
     }
 };

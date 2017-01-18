@@ -17,12 +17,14 @@
   },
   "homepage": "https://github.com/jacobvaneijk/driver-revenge#readme",
   "dependencies": {
+    "box2d.js": "^1.0.0",
     "express": "^4.14.0",
     "normalize.css": "^5.0.0",
     "nunjucks": "^3.0.0",
     "png.js": "^0.2.1",
     "serve-favicon": "^2.3.2",
-    "socket.io": "^1.6.0"
+    "socket.io": "^1.6.0",
+    "victor": "^1.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.3",

@@ -143,7 +143,7 @@ module.exports = function(server) {
                 }
             }
 
-            console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] Started accelerating.');
+            games[socket.gameIndex].socket.emit('throttle down', playerIndex);
         });
 
         /**
@@ -164,7 +164,7 @@ module.exports = function(server) {
                 }
             }
 
-            console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] Stopped accelerating.');
+            games[socket.gameIndex].socket.emit('throttle up', playerIndex);
         });
 
         /**
@@ -206,7 +206,10 @@ module.exports = function(server) {
                 }
             }
 
-            console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] ' + data + '.');
+            games[socket.gameIndex].socket.emit('steer', {
+                value: data,
+                player: playerIndex
+            });
         });
 
         /**
