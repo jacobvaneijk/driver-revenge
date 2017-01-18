@@ -82,9 +82,6 @@ module.exports = {
                     object.position.x = 64 * x;
                     object.position.y = 64 * (y - level.height / 2);
 
-                    // object.scale.x = 0.5;
-                    // object.scale.y = 0.5;
-
                     self.stage.addChild(object);
                 }
             }
@@ -165,6 +162,9 @@ module.exports = {
                 sprite.anchor.x = 0.5;
                 sprite.anchor.y = 0.5;
 
+                sprite.scale.x = 0.5;
+                sprite.scale.y = 0.5;
+
                 self.stage.addChild(sprite);
                 self.cars.push(car);
             }
@@ -172,27 +172,42 @@ module.exports = {
     },
 
     throttle: function(index) {
-        this.cars[index].inputs.brake = 0.0;
         this.cars[index].inputs.throttle = 1.0;
+        this.cars[index].inputs.rollResist = 8.0;
     },
 
     brake: function(index) {
-        this.cars[index].inputs.throttle = 0.0;
-        this.cars[index].inputs.brake = 0.5;
+        this.cars[index].inputs.throttle = 0;
+        this.cars[index].inputs.rollResist = 200;
     },
 
     steer: function(index, steering) {
-        if (this.cars[index].inputs.right == 0.0 && this.cars[index].inputs.left == 0.0) {
-            if (steering > 2.5) {
-                this.cars[index].inputs.right = 1.0;
-            } else if (steering < -2.5) {
-                this.cars[index].inputs.left = 1.0;
-            }
-        } else {
-            if (steering > -2.5 && steering < 2.5) {
-                this.cars[index].inputs.left = 0.0;
-                this.cars[index].inputs.right = 0.0;
-            }
+        // Neutral
+        if (steering > -1 && steering <= 1) {
+            this.cars[index].inputs.right = 0;
+            this.cars[index].inputs.left = 0;
+        }
+
+        // Right
+        if (steering > 1 && steering <= 2.5) {
+            this.cars[index].inputs.right = 0.1;
+        } else if (steering > 2.5 && steering <= 4.5) {
+            this.cars[index].inputs.right = 0.3;
+        } else if (steering > 4.5 && steering <= 7) {
+            this.cars[index].inputs.right = 0.6;
+        } else if (steering > 7 && steering < 10) {
+            this.cars[index].inputs.right = 1.0;
+        }
+
+        // Left
+        if (steering < -1 && steering >= -2.5) {
+            this.cars[index].inputs.left = 0.1;
+        } else if (steering < -2.5 && steering >= -4.5) {
+            this.cars[index].inputs.left = 0.3;
+        } else if (steering < -4.5 && steering >= -7) {
+            this.cars[index].inputs.left = 0.6;
+        } else if (steering < -7 && steering > -10) {
+            this.cars[index].inputs.left = 1.0;
         }
     }
 };

@@ -18,13 +18,13 @@ var Car = function(sprite, x, y) {
     this.smoothSteer = true;
     this.safeSteer = true;
 
-    this.inertia = 0.0;
+    this.inertia = 10.0;
     this.wheelBase = 0.0;
     this.axleWeightRatioFront = 0.0;
     this.axleWeightRatioRear = 0.0;
 
     this.gravity = 9.81;
-    this.mass = 800;
+    this.mass = 1200;
     this.inertiaScale = 1.0;
     this.halfWidth = 0.8;
     this.cgToFront = 2.0;
@@ -33,16 +33,16 @@ var Car = function(sprite, x, y) {
     this.cgToRearAxle = 1.25;
     this.cgHeight = 0.55;
     this.wheelRadius = 0.3;
-    this.tireGrip = 2.0;
+    this.tireGrip = 5.0;
     this.lockGrip = 0.7;
-    this.engineForce = 16000.0;
+    this.engineForce = 24000.0;
     this.brakeForce = 12000.0;
     this.eBrakeForce = this.brakeForce / 2.5;
     this.weightTransfer = 0.2;
-    this.maxSteer = 0.6;
+    this.maxSteer = 0.7;
     this.cornerStiffnessFront = 5.0;
     this.cornerStiffnessRear = 5.2;
-    this.airResist = 2.5;
+    this.airResist = 5;
     this.rollResist = 8.0;
 
     this.inertia = this.mass * this.inertiaScale;
