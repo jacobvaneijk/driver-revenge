@@ -1,8 +1,9 @@
 var GMath = require('./gmath');
 var Vec2 = require('./vec2');
 
-var Car = function(sprite, x, y) {
-    this.sprite = sprite;
+var Car = function(car, x, y) {
+    this.car = car;
+    this.health = 100;
 
     this.heading = 0.0;
     this.position = new Vec2(x, y);
@@ -123,9 +124,9 @@ Car.prototype.doPhysics = function(dt) {
     this.position.x += (this.velocity.x * 8) * dt;
     this.position.y += (this.velocity.y * 8) * dt;
 
-    this.sprite.position.x = this.position.x;
-    this.sprite.position.y = this.position.y;
-    this.sprite.rotation = this.heading;
+    this.car.position.x = this.position.x;
+    this.car.position.y = this.position.y;
+    this.car.children[0].rotation = this.heading;
 };
 
 Car.prototype.update = function(dtms) {
@@ -137,6 +138,12 @@ Car.prototype.update = function(dtms) {
     this.steerAngle = this.steer * this.maxSteer;
 
     this.doPhysics(dt);
+};
+
+Car.prototype.setHealth = function(val) {
+    this.health = val;
+
+    this.car.children[1].value.width = 39 * (val / 100);
 };
 
 module.exports = Car;

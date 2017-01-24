@@ -30,6 +30,9 @@ $(window).ready(function () {
     $('.js-next').on('click', function(event) {
         event.preventDefault();
 
+        // We want a black background (no racist).
+        $('body').css('background', '#000000');
+
         // Inform the server we want to start the game.
         socket.emit('start-game');
 
