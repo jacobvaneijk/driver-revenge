@@ -63,7 +63,7 @@ var Car = function(car, x, y) {
 /**
  * You are not expected to understand this.
  */
-Car.prototype.doPhysics = function(dt) {
+Car.prototype.doPhysics = function(dt, worldBounds, collisionBounds) {
     var sn = Math.sin(this.heading);
     var cs = Math.cos(this.heading);
 
@@ -124,12 +124,32 @@ Car.prototype.doPhysics = function(dt) {
     this.position.x += (this.velocity.x * 8) * dt;
     this.position.y += (this.velocity.y * 8) * dt;
 
+    // Collision detection.
+    if (this.position.x < worldBounds.x0) {
+        this.position.x = worldBounds.x0;
+    }
+
+    if (this.position.x > worldBounds.x1) {
+        this.position.x = worldBounds.x1;
+    }
+
+    if (this.position.y < worldBounds.y0) {
+        this.position.y = worldBounds.y0;
+    }
+
+    if (this.position.y > worldBounds.y1) {
+        this.position.y = worldBounds.y1;
+    }
+
+    for (var i = 0; i < collisionBounds.length; ++i) {
+    }
+
     this.car.position.x = this.position.x;
     this.car.position.y = this.position.y;
     this.car.children[0].rotation = this.heading;
 };
 
-Car.prototype.update = function(dtms) {
+Car.prototype.update = function(dtms, worldBounds, collisionBounds) {
     var dt = dtms / 1000.0;
 
     this.throttle = 0.0;
@@ -137,7 +157,7 @@ Car.prototype.update = function(dtms) {
     this.steer = this.inputs.right - this.inputs.left;
     this.steerAngle = this.steer * this.maxSteer;
 
-    this.doPhysics(dt);
+    this.doPhysics(dt, worldBounds, collisionBounds);
 };
 
 Car.prototype.setHealth = function(val) {

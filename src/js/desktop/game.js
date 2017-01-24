@@ -3,7 +3,9 @@ var GMath = require('./gmath');;
 var Car = require('./car');
 
 module.exports = {
+    collisionBounds: [],
     previousTime: null,
+    worldBounds: {},
     renderer: null,
     socket: null,
     stage: null,
@@ -25,6 +27,13 @@ module.exports = {
 
         var width = level.width * 64;
         var height = (level.height / 2) * 64;
+
+        this.worldBounds = {
+            x0: 35,
+            y0: 35,
+            x1: level.width * 64 - 35,
+            y1: (level.height / 2) * 64 - 35
+        };
 
         this.renderer.autoResize = true;
         this.renderer.resize(width, height);
@@ -82,6 +91,13 @@ module.exports = {
                     object.position.x = 64 * x;
                     object.position.y = 64 * (y - level.height / 2);
 
+                    self.collisionBounds.push({
+                        x0: object.position.x,
+                        y0: object.position.y,
+                        x1: object.position.x,
+                        y1: object.position.y
+                    });
+
                     self.stage.addChild(object);
                 }
             }
@@ -131,7 +147,7 @@ module.exports = {
             }
 
             for (var i = 0; i < this.cars.length; ++i) {
-                this.cars[i].update(deltaTime);
+                this.cars[i].update(deltaTime, this.worldBounds, this.collisionBounds);
             }
 
             this.previousTime = currentTime;

@@ -241,6 +241,10 @@ module.exports = function(server) {
                     }
                 }
 
+                if (typeof games[socket.gameIndex].players[playerIndex] === 'undefined') {
+                    return;
+                }
+
                 console.log('[Player ' + games[socket.gameIndex].players[playerIndex].name + '] Disconnected from game "' + games[socket.gameIndex].key + '".');
 
                 // Inform the game the player left.
