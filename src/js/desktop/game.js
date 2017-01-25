@@ -1,5 +1,5 @@
 var Connections = require('./connections');
-var GMath = require('./gmath');;
+var GMath = require('./gmath');
 var Car = require('./car');
 
 module.exports = {
@@ -91,13 +91,21 @@ module.exports = {
                     object.position.x = 64 * x;
                     object.position.y = 64 * (y - level.height / 2);
 
-                    self.collisionBounds.push({
-                        x0: object.position.x,
-                        y0: object.position.y,
-                        x1: object.position.x,
-                        y1: object.position.y
-                    });
+                    var bounds = new SAT.Box(new SAT.Vector(object.position.x, object.position.y), object.width, object.height).toPolygon();
 
+                    self.collisionBounds.push(bounds);
+
+                    var graphics = new PIXI.Graphics();
+
+                    graphics.beginFill(0xFF0000);
+                    graphics.drawRect(
+                        bounds.pos.x,
+                        bounds.pos.y,
+                        bounds.calcPoints[2].x,
+                        bounds.calcPoints[2].y
+                    );
+
+                    self.stage.addChild(graphics);
                     self.stage.addChild(object);
                 }
             }
@@ -201,9 +209,24 @@ module.exports = {
                 healthBar.addChild(healthBarValue);
                 healthBar.value = healthBarValue;
 
+                var carBounds = new PIXI.Graphics();
+                var polygon = new SAT.Box(new SAT.Vector(400 * (i + 1), 100), car.width, car.height).toPolygon();
+
+                carBounds.beginFill(0x00FF00);
+                carBounds.drawRect(
+                    polygon.pos.x,
+                    polygon.pos.y,
+                    polygon.calcPoints[2].x,
+                    polygon.calcPoints[2].y
+                );
+
+                carBounds.pivot.x = polygon.calcPoints[2].x / 2;
+                carBounds.pivot.y = polygon.calcPoints[2].y / 2;
+
+                self.stage.addChild(carBounds);
                 self.stage.addChild(container);
 
-                self.cars.push(new Car(container, 400 * (i + 1), 100));
+                self.cars.push(new Car(container, 400 * (i + 1), 100, carBounds));
             }
         });
     },
@@ -223,6 +246,10 @@ module.exports = {
     },
 
     steer: function(index, steering) {
+        if (typeof this.cars[index] === 'undefined') {
+            return;
+        }
+
         // Neutral
         if (steering > -1 && steering <= 1) {
             this.cars[index].inputs.right = 0;
