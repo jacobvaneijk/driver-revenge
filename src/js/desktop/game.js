@@ -91,21 +91,19 @@ module.exports = {
                     object.position.x = 64 * x;
                     object.position.y = 64 * (y - level.height / 2);
 
-                    var bounds = new SAT.Box(new SAT.Vector(object.position.x, object.position.y), object.width, object.height).toPolygon();
+                    self.collisionBounds.push({
+                        x0: object.position.x - 32,
+                        y0: object.position.y - 32,
+                        x1: object.position.x + object.width + 32,
+                        y1: object.position.y + object.height + 32
+                    });
 
-                    self.collisionBounds.push(bounds);
+                    var bounds = new PIXI.Graphics();
 
-                    var graphics = new PIXI.Graphics();
+                    bounds.beginFill(0xFF0000);
+                    bounds.drawRect(object.position.x, object.position.y, object.width, object.height)
 
-                    graphics.beginFill(0xFF0000);
-                    graphics.drawRect(
-                        bounds.pos.x,
-                        bounds.pos.y,
-                        bounds.calcPoints[2].x,
-                        bounds.calcPoints[2].y
-                    );
-
-                    self.stage.addChild(graphics);
+                    self.stage.addChild(bounds);
                     self.stage.addChild(object);
                 }
             }
@@ -209,24 +207,9 @@ module.exports = {
                 healthBar.addChild(healthBarValue);
                 healthBar.value = healthBarValue;
 
-                var carBounds = new PIXI.Graphics();
-                var polygon = new SAT.Box(new SAT.Vector(400 * (i + 1), 100), car.width, car.height).toPolygon();
-
-                carBounds.beginFill(0x00FF00);
-                carBounds.drawRect(
-                    polygon.pos.x,
-                    polygon.pos.y,
-                    polygon.calcPoints[2].x,
-                    polygon.calcPoints[2].y
-                );
-
-                carBounds.pivot.x = polygon.calcPoints[2].x / 2;
-                carBounds.pivot.y = polygon.calcPoints[2].y / 2;
-
-                self.stage.addChild(carBounds);
                 self.stage.addChild(container);
 
-                self.cars.push(new Car(container, 400 * (i + 1), 100, carBounds));
+                self.cars.push(new Car(container, 400 * (i + 1), 100));
             }
         });
     },

@@ -1,18 +1,16 @@
 var GMath = require('./gmath');
 var Vec2 = require('./vec2');
 
-var Car = function(car, x, y, stage) {
-    this.carPolygon = new SAT.Box(new SAT.Vector(x, y), car.width, car.height).toPolygon();
+var Car = function(car, x, y) {
     this.health = 100;
-    this.carBounds = stage;
     this.car = car;
 
     this.heading = 0.0;
-    this.position = new SAT.Vector(x, y);
-    this.velocity = new SAT.Vector();
-    this.velocity_c = new SAT.Vector();
-    this.accel = new SAT.Vector();
-    this.accel_c = new SAT.Vector();
+    this.position = new Vec2(x, y);
+    this.velocity = new Vec2();
+    this.velocity_c = new Vec2();
+    this.accel = new Vec2();
+    this.accel_c = new Vec2();
     this.absVel = 0.0;
     this.yawRate = 0.0;
     this.steer = 0.0;
@@ -123,32 +121,97 @@ Car.prototype.doPhysics = function(dt, worldBounds, collisionBounds) {
     this.yawRate += angularAccel * dt;
     this.heading += this.yawRate * dt;
 
-    this.carPolygon.setAngle(this.heading);
-    this.carPolygon.pos.x += (this.velocity.x * 8) * dt;
-    this.carPolygon.pos.y += (this.velocity.y * 8) * dt;
+    var oldPosition = {
+        x0: this.position.x,
+        y0: this.position.y,
+        x1: this.position.x + this.car.width,
+        y1: this.position.y + this.car.height
+    };
 
-    this.carBounds.position.x = this.carPolygon.pos.x;
-    this.carBounds.position.y = this.carPolygon.pos.y;
-    this.carBounds.rotation = this.heading;
+    this.position.x += (this.velocity.x * 8) * dt;
+    this.position.y += (this.velocity.y * 8) * dt;
 
-    var hasCollided = false;
+    var newPosition = {
+        x0: this.position.x,
+        y0: this.position.y,
+        x1: this.position.x + this.car.width,
+        y1: this.position.y + this.car.height
+    };
 
+    // Detect the world boundaries.
+    if (this.position.x < worldBounds.x0) {
+        this.position.x = worldBounds.x0;
+    }
+
+    if (this.position.x > worldBounds.x1) {
+        this.position.x = worldBounds.x1;
+    }
+
+    if (this.position.y < worldBounds.y0) {
+        this.position.y = worldBounds.y0;
+    }
+
+    if (this.position.y > worldBounds.y1) {
+        this.position.y = worldBounds.y1;
+    }
+
+    // Detect collisions with objects.
     for (var i = 0; i < collisionBounds.length; ++i) {
-        var collided = SAT.testPolygonPolygon(this.carPolygon, collisionBounds[i]);
+        if (
+            this.position.x > collisionBounds[i].x0 &&
+            this.position.y > collisionBounds[i].y0 &&
+            this.position.x < collisionBounds[i].x1 &&
+            this.position.y < collisionBounds[i].y1
+        ) {
+            // Collided from either the top or the bottom.
+            if (
+                (oldPosition.y1 < collisionBounds[i].y0 && newPosition.y1 >= collisionBounds[i].y0) ||
+                (oldPosition.y0 >= collisionBounds[i].y1 && newPosition.y0 < collisionBounds[i].y1)
+            ) {
+                console.log('Colliding from top / bottom.');
+            }
 
-        if (collided !== false) {
-            hasCollided = true;
+            // Collided from either the left or the right.
+            if (
+                (oldPosition.x1 < collisionBounds[i].x0 && newPosition.x1 >= collisionBounds[i].x0) ||
+                (oldPosition.y0 >= collisionBounds[i].x1 && newPosition.y0 < collisionBounds[i].x1)
+            ) {
+                console.log('Colliding from right / left.');
+            }
+
+            // if (this.position.x > collisionBounds[i].x0 && this.position.x < collisionBounds[i].x1 - 10 && this.position.y > collisionBounds[i].y0) {
+            //     this.position.x -= this.position.x - collisionBounds[i].x0;
+            // }
+            //
+            // if (this.position.x < collisionBounds[i].x1 && this.position.x > collisionBounds[i].x0 + 10 && this.position.y > collisionBounds[i].y0) {
+            //     this.position.x -= this.position.x - collisionBounds[i].x1;
+            // }
+            //
+            // if (this.position.y > collisionBounds[i].y0 && this.position.y < collisionBounds[i].y1 - 10) {
+            //     this.position.y -= this.position.y - collisionBounds[i].y0;
+            // }
+            //
+            // if (this.position.y < collisionBounds[i].y1 && this.position.y > collisionBounds[i].y0 + 10) {
+            //     this.position.y -= this.position.y - collisionBounds[i].y1;
+            // }
+
+            // if (this.position.x < collisionBounds[i].x1) {
+            //     this.position.x = collisionBounds[i].x0;
+            // } else {
+            //     this.position.x = collisionBounds[i].x1;
+            // }
+            //
+            // if (this.position.y < collisionBounds[i].y1) {
+            //     this.position.y = collisionBounds[i].y0;
+            // } else {
+            //     this.position.y = collisionBounds[i].y1;
+            // }
         }
     }
 
-    if (!hasCollided) {
-        this.position.x += (this.velocity.x * 8) * dt;
-        this.position.y += (this.velocity.y * 8) * dt;
-
-        this.car.children[0].rotation = this.heading;
-        this.car.position.x = this.position.x;
-        this.car.position.y = this.position.y;
-    }
+    this.car.children[0].rotation = this.heading;
+    this.car.position.x = this.position.x;
+    this.car.position.y = this.position.y;
 };
 
 Car.prototype.update = function(dtms, worldBounds, collisionBounds) {
