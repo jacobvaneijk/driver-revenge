@@ -172,38 +172,16 @@ module.exports = {
         // Create a new car for every connection.
         PIXI.loader.load(function(loader, resources) {
             for (var i = 0; i < Connections.connections.length; ++i) {
-                var container = new PIXI.Container();
-
                 var car = new PIXI.Sprite(resources['car_' + colors[i]].texture);
-                var healthBar = new PIXI.DisplayObjectContainer();
-
-                container.addChild(car);
-                container.addChild(healthBar);
 
                 car.anchor.x = 0.5;
                 car.anchor.y = 0.5;
                 car.scale.x = 0.5;
                 car.scale.y = 0.5;
 
-                // Draw the healthbar's border.
-                var healthBarBackground = new PIXI.Graphics();
-                healthBarBackground.beginFill(0xF21515, 1);
-                healthBarBackground.lineStyle(2, 0x000000, 1);
-                healthBarBackground.drawRect(0, 0, 40, 8);
-                healthBarBackground.endFill();
-                healthBar.addChild(healthBarBackground);
+                self.stage.addChild(car);
 
-                // Draw the healthbar's value.
-                var healthBarValue = new PIXI.Graphics();
-                healthBarValue.beginFill(0x3AF215);
-                healthBarValue.drawRect(0, 1, 39, 6);
-                healthBarValue.endFill();
-                healthBar.addChild(healthBarValue);
-                healthBar.value = healthBarValue;
-
-                self.stage.addChild(container);
-
-                self.cars.push(new Car(container, 400 * (i + 1), 100));
+                self.cars.push(new Car(car, 400 * (i + 1), 100));
             }
         });
     },
@@ -211,10 +189,6 @@ module.exports = {
     throttle: function(index) {
         this.cars[index].inputs.throttle = 1.0;
         this.cars[index].inputs.rollResist = 8.0;
-
-        this.cars[index].setHealth(
-            this.cars[index].health - 10
-        );
     },
 
     brake: function(index) {

@@ -146,7 +146,7 @@ Car.prototype.doPhysics = function(dt, worldBounds, collisionBounds) {
 
     this.car.position.x = this.position.x;
     this.car.position.y = this.position.y;
-    this.car.children[0].rotation = this.heading;
+    this.car.rotation = this.heading;
 };
 
 Car.prototype.update = function(dtms, worldBounds, collisionBounds) {
@@ -158,12 +158,6 @@ Car.prototype.update = function(dtms, worldBounds, collisionBounds) {
     this.steerAngle = this.steer * this.maxSteer;
 
     this.doPhysics(dt, worldBounds, collisionBounds);
-};
-
-Car.prototype.setHealth = function(val) {
-    this.health = val;
-
-    this.car.children[1].value.width = 39 * (val / 100);
 };
 
 module.exports = Car;
