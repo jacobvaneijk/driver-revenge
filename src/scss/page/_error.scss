@@ -8,12 +8,15 @@
 
     .error-page__title {
         font: {
+            family: 'Fredoka One', sans-serif;
+            weight: 100;
             size: 2.5rem;
         }
     }
 
     .error-page__description {
         font: {
+            weight: 300;
             size: 1.25rem;
         }
     }

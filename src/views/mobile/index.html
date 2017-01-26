@@ -1,6 +1,7 @@
 {% extends 'mobile/layout.html' %}
 
 {% block body %}
+<!--
     <div class="change-name__success js-waiting">
         <svg class="change-name__loader" width="97px" height="97px" viewBox="0 0 99 99" xmlns="http://www.w3.org/2000/svg">
             <circle class="loader__path" fill="none" stroke-width="6" stroke-linecap="round" cx="49" cy="49" r="45"></circle>
@@ -32,5 +33,37 @@
         <div class="controller__speedo">
             <span class="controller__points">25pt</span>
         </div>
+    </div>
+-->
+
+    <div class="enter-code__wrapper">
+        <div class="enter-code__success js-waiting">
+            <div class="enter-code__information">
+                <h1 class="enter-code__player js-player">Player 1</h1>
+                <img class="enter-code__car js-car">
+                <p class="enter-code__status js-status">Waiting for other players to join<span class="js-periods"></span></p>
+            </div>
+        </div>
+
+        <div class="enter-code js-form">
+            <label class="form__label enter-code__label" for="name">The code, please.</label>
+
+            <div class="form__wrapper js-form">
+                <input class="form__input enter-code__input js-code" id="name" type="text" maxlength="5" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+
+                <button class="form__button enter-code__button js-enter">Enter</button>
+            </div>
+        </div>
+
+        <div class="enter-code__error js-error">
+            <h1 class="error-page__title">Oops!</h1>
+            <p class="error-page__description js-error-description"></p>
+        </div>
+
+        <img class="enter-code__logo" src="/img/logo.png"></img>
+    </div>
+
+    <div class="controller js-controller">
+        <div class="controller__gas js-gas"></div>
     </div>
 {% endblock %}

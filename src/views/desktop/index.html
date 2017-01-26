@@ -1,11 +1,35 @@
 {% extends 'desktop/layout.html' %}
 
 {% block body %}
+<!--
     <div class="home__wrapper">
         <h1 class="home__url js-url">url</h1>
 
         <ul class="home__connections js-connections"></ul>
 
         <button class="form__button js-next">Next</button>
+    </div>
+-->
+
+    <div class="home__wrapper">
+        <div class="home__step home__step--first">
+            <h1 class="step__title">Step 1</h1>
+            <p class="step__text">Open your mobile browser and enter the link
+            below.</p>
+            <img class="step__phone" src="/img/phone_url.png">
+        </div>
+
+        <div class="home__step">
+            <h1 class="step__title">Step 2</h1>
+            <p class="step__text">Enter the code below into the mobile site.</p>
+            <p class="step__code js-code"></p>
+        </div>
+
+        <div class="home__step">
+            <h1 class="step__title">Step 3</h1>
+            <p class="step__text">Click on the button below when you&#39;re all ready to take revenge!</p>
+            <ul class="step__connections js-connections"></ul>
+            <button class="step__button js-next">Ready!</button>
+        </div>
     </div>
 {% endblock %}

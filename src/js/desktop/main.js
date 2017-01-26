@@ -6,10 +6,9 @@ $(window).ready(function () {
 
     // Generate a random game key, which acts as an identifier.
     var gameKey = Math.random().toString(36).substr(2, 5);
-    var gameURL = location.host + '/' + gameKey;
 
-    // Display the URL with the room identifier.
-    $('.js-url').text(gameURL);
+    // Display the room identifier.
+    $('.js-code').text(gameKey);
 
     // Inform the server we want to host a game.
     socket.emit('game', gameKey);

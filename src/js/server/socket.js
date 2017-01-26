@@ -14,7 +14,27 @@ module.exports = function(server) {
 
     io.on('connection', function(socket) {
 
-        socket.on('check-game-conditions', function(key) {
+        /**
+         * A new client connected, which wants to host a game.
+         */
+        socket.on('game', function(key) {
+            var game = new Game(key, socket);
+
+            // Make sure we can later identify the socket (i.e. on disconnection).
+            game.socket.type = 'game';
+
+            // Add the newly created game to the list of games.
+            games.push(game);
+
+            console.log('[Game ' + key + '] Game created.');
+        });
+
+        /**
+         * A new client connected, which wants to attend to a game as a player.
+         */
+        socket.on('player', function(key) {
+            var player = new Player('', socket);
+
             // Find the game the user wants to join.
             var gameIndex = null;
 
@@ -37,37 +57,6 @@ module.exports = function(server) {
 
                 return;
             }
-        });
-
-        /**
-         * A new client connected, which wants to host a game.
-         */
-        socket.on('game', function(key) {
-            var game = new Game(key, socket);
-
-            // Make sure we can later identify the socket (i.e. on disconnection).
-            game.socket.type = 'game';
-
-            // Add the newly created game to the list of games.
-            games.push(game);
-
-            console.log('[Game ' + key + '] Game created.');
-        });
-
-        /**
-         * A new client connected, which wants to attend to a game as a player.
-         */
-        socket.on('player', function(data) {
-            var player = new Player(data.name, socket);
-
-            // Find the game the user wants to join.
-            var gameIndex = null;
-
-            for (var i = 0; i < games.length; ++i) {
-                if (games[i].key === data.key) {
-                    gameIndex = i;
-                }
-            }
 
             // Make sure we can later identify the socket (i.e. on disconnection).
             player.socket.type = 'player';
@@ -77,9 +66,12 @@ module.exports = function(server) {
             games[gameIndex].addPlayer(player);
 
             // Inform the game a new player is added.
-            games[gameIndex].socket.emit('player-joined', games[gameIndex].players.length, data.name);
+            games[gameIndex].socket.emit('player-joined', games[gameIndex].players.length, 'Player ' + games[gameIndex].players.length);
 
-            console.log('[Player ' + data.name + '] Joined game "' + games[gameIndex].key + '".');
+            // Emit the player's number.
+            player.socket.emit('player-number', games[gameIndex].players.length);
+
+            console.log('[Player ' + (games[gameIndex].players.length) + '] Joined game "' + games[gameIndex].key + '".');
         });
 
         /**

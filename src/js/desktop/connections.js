@@ -26,11 +26,11 @@ module.exports = {
         var emptyConnections = this.maxPlayers - this.connections.length;
 
         for (var i = 0; i < this.connections.length; ++i) {
-            $('.js-connections').append('<li class="home__connection home__connection--active" data-name="' + this.connections[i] + '"></li>');
+            $('.js-connections').append('<li class="step__connection step__connection--active" data-name="' + this.connections[i] + '"></li>');
         }
 
         for (var i = 0; i < emptyConnections; ++i) {
-            $('.js-connections').append('<li class="home__connection"></li>');
+            $('.js-connections').append('<li class="step__connection"></li>');
         }
     }
 };

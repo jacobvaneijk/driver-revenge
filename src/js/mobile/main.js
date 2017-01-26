@@ -3,19 +3,37 @@ var SetName = require('./setname.js');
 var Error = require('./error.js');
 
 $(window).ready(function() {
+    var periods = 0;
     var socket = io();
 
-    // Extract the game identifier from the URL.
-    var gameKey = window.location.href.split('/')[3];
-
-    // Check the game conditions with the server.
-    socket.emit('check-game-conditions', gameKey);
-
-    $('.js-save').on('click', function(event) {
+    $('.js-enter').on('click', function(event) {
         event.preventDefault();
 
-        // Save the name.
-        SetName.saveName(socket, gameKey);
+        var gameKey = $('.js-code').val();
+
+        // Inform the server we want to join a game.
+        socket.emit('player', gameKey);
+
+        // Server tells which player we are.
+        socket.on('player-number', function(number) {
+            $('.js-player').html('Player ' + number);
+
+            var carColors = ['black', 'blue', 'green', 'red', 'yellow'];
+
+            $('.js-car').attr('src', '/img/cars/car_' + carColors[number - 1] + '.png');
+
+            // Show the waiting screen.
+            $('.js-form').hide();
+            $('.js-waiting').css('display', 'block');
+
+            setInterval(function() {
+                if (++periods === 4) {
+                    periods = 0;
+                }
+
+                $('.js-periods').text('.'.repeat(periods));
+            }, 500);
+        });
     });
 
     // Display a message if the game we want to join doesn't exist.
